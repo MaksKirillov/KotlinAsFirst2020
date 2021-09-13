@@ -198,7 +198,7 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
     b - a == 0 || d - c == 0 -> 0
     a < c && b == c && b < d -> 0
     a < c && c < b && b < d -> b - c
-    a == b && c == d -> c - a
+    a == c && b == d -> c - a
     c < a && a < d && d < b -> d - a
     c < a && d == a && d < b -> 0
     a < c && d < b -> d - c
