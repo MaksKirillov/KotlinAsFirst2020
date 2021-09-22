@@ -80,7 +80,6 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
     val arshinsToCm = arshins * 16 * 4.445 / 100
     val vershoksToCm = vershoks * 4.445 / 100
     return sagenesToCm + arshinsToCm + vershoksToCm
-    //(((sagenes * 48) + (arshins * 16) + vershoks) * 4.445) / 100 //Старое решение
 }
 
 /**
@@ -95,7 +94,6 @@ fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
     val secToRad = sec * PI / (180 * 3600)
     return degToRad + minToRad + secToRad
 }
-//((deg * 3600 + min * 60 + sec) / 206264.806) //Старое решение
 
 /**
  * Тривиальная (1 балл)
@@ -123,8 +121,7 @@ fun thirdDigit(number: Int): Int = (number % 1000) / 100
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
     val allMinArrive = hoursArrive * 60 + minutesArrive
     val allMinDepart = hoursDepart * 60 + minutesDepart
-    return allMinArrive - allMinDepart
-} //((hoursArrive * 60) + minutesArrive) - (((hoursDepart * 60) + minutesDepart)) //Старое решение
+    return allMinArrive - allMinDepart}
 
 /**
  * Простая (2 балла)
@@ -133,11 +130,12 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
+
 fun accountInThreeYears(initial: Int, percent: Int): Double {
     val coefficient = 1.0 + percent / 100.0
     return initial * coefficient.pow(3)
 }
-//((initial * (1.0 + (percent / 100.0))) * (1.0 + (percent / 100.0))) * (1.0 + (percent / 100.0)) //Старое решение
+
 /**
  * Простая (2 балла)
  *
