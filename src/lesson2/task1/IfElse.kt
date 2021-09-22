@@ -71,10 +71,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String =
     when {
-        age % 10 == 0 || age % 10 in 5..9 || age in 11..19 || age in 111..119 -> "$age лет"
-        age % 10 == 1 && age !in 11..19 && age !in 111..119 -> "$age год"
-        age % 10 in 2..4 && age !in 11..19 && age !in 111..119 -> "$age года"
-        else -> "ERROR"
+        age % 10 == 0 || age % 10 in 5..9 || age % 100 in 11..19 -> "$age лет"
+        age % 10 == 1 && age % 100 !in 11..19 -> "$age год"
+        else -> "$age года"
     }
 
 
@@ -90,21 +89,16 @@ fun timeForHalfWay(
     t2: Double, v2: Double,
     t3: Double, v3: Double
 ): Double {
-    val s: Double = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2
-    val s1: Double = t1 * v1
-    val s2: Double = t2 * v2
-    val s3: Double = t3 * v3
+    val s = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    val s3 = t3 * v3
     return when {
         s1 >= s -> (s / s1) * t1
         s1 + s2 >= s -> t1 + ((s - s1) / s2) * t2
-        s1 + s2 + s3 >= s -> t1 + t2 + ((s - s1 - s2) / s3) * t3
-        else -> 0.0
+        else -> t1 + t2 + ((s - s1 - s2) / s3) * t3
     }
 
-/*  if (s1 >= s) return ((s / s1) * t1) else
-      if (s1 + s2 >= s) return (t1 + ((s - s1) / s2) * t2) else
-          if (s1 + s2 + s3 >= s) return (t1 + t2 + ((s - s1 - s2) / s3) * t3) else
-              return (0.0); */ //Первоначальное решение
 }
 
 /**
@@ -143,7 +137,6 @@ fun whichRookThreatens(
 } */ //ладьи могут загораживать друг друга
 
 
-
 /**
  * Простая (2 балла)
  *
@@ -174,14 +167,13 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val big = max(max(a, b), max(b, c))
+    val big = maxOf(a, b, c)
     return when {
         a >= b + c || b >= a + c || c >= b + a -> -1
         sqr(a) + sqr(b) < sqr(big) || sqr(c) + sqr(a) < sqr(big) || sqr(b) + sqr(c) < sqr(big) -> 2
         sqr(a) + sqr(b) == sqr(big) || sqr(c) + sqr(a) == sqr(big) || sqr(b) + sqr(c) == sqr(big) -> 1
-        sqr(a) + sqr(b) > sqr(big) || sqr(c) + sqr(a) > sqr(big) || sqr(b) + sqr(c) > sqr(big) -> 0
-        else -> 404
-}
+        else -> 0
+    }
 }
 
 /**
@@ -193,15 +185,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-    d < a -> -1
-    b < c -> -1
-    b - a == 0 || d - c == 0 -> 0
-    a < c && b == c && b < d -> 0
-    a < c && c < b && b < d -> b - c
-    a == c && b == d -> b - a
-    c < a && a < d && d < b -> d - a
-    c < a && d == a && d < b -> 0
+    (d < a) || (b < c) -> -1
+    //b - a == 0 || d - c == 0 -> 0
+    //a < c && b == c && b < d -> 0
+    //c < a && d == a && d < b -> 0
+    c in a - 1..b + 1 && b <= d -> b - c
+    //a == c && b == d -> b - a
+    a in c - 1..d + 1 && d <= b -> d - a
     a <= c && d <= b -> d - c
     c <= a && b <= d -> b - a
-    else -> 404
+    else -> 0
 }
