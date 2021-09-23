@@ -121,7 +121,8 @@ fun thirdDigit(number: Int): Int = (number % 1000) / 100
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
     val allMinArrive = hoursArrive * 60 + minutesArrive
     val allMinDepart = hoursDepart * 60 + minutesDepart
-    return allMinArrive - allMinDepart}
+    return allMinArrive - allMinDepart
+}
 
 /**
  * Простая (2 балла)
