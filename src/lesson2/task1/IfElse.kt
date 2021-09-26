@@ -72,7 +72,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 fun ageDescription(age: Int): String =
     when {
         age % 10 == 0 || age % 10 in 5..9 || age % 100 in 11..19 -> "$age лет"
-        age % 10 == 1 && age % 100 !in 11..19 -> "$age год"
+        age % 10 == 1 -> "$age год"
         else -> "$age года"
     }
 
@@ -92,11 +92,10 @@ fun timeForHalfWay(
     val s = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2
     val s1 = t1 * v1
     val s2 = t2 * v2
-    val s3 = t3 * v3
     return when {
-        s1 >= s -> (s / s1) * t1
-        s1 + s2 >= s -> t1 + ((s - s1) / s2) * t2
-        else -> t1 + t2 + ((s - s1 - s2) / s3) * t3
+        s1 >= s -> s / v1
+        s1 + s2 >= s -> (s - s1) / v2 + t1
+        else -> (s - s1 - s2) / v3 + t1 + t2
     }
 
 }
