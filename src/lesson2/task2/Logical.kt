@@ -78,10 +78,10 @@ fun circleInside(
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
     (minOf(a, b, r) == a || minOf(a, b, r) == b) &&
-            (minOf(a, b, s) == a || minOf(a, b, r) == s) -> true
+            (minOf(a, b, s) == a || minOf(a, b, s) == b) -> true
     (minOf(b, c, r) == b || minOf(b, c, r) == c) &&
-            (minOf(b, c, s) == b || minOf(b, c, r) == c) -> true
-    (minOf(a, b, r) == a || minOf(a, b, r) == b) &&
-            (minOf(a, b, s) == a || minOf(a, b, r) == s) -> true
+            (minOf(b, c, s) == b || minOf(b, c, s) == c) -> true
+    (minOf(a, c, r) == a || minOf(a, c, r) == c) &&
+            (minOf(a, c, s) == a || minOf(a, c, s) == c) -> true
     else -> false
 }
