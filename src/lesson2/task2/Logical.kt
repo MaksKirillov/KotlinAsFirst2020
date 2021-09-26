@@ -4,6 +4,7 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.min
 
 /**
  * Пример
@@ -77,11 +78,8 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
-    (minOf(a, b, r) == a || minOf(a, b, r) == b) &&
-            (minOf(a, b, s) == a || minOf(a, b, s) == b) -> true
-    (minOf(b, c, r) == b || minOf(b, c, r) == c) &&
-            (minOf(b, c, s) == b || minOf(b, c, s) == c) -> true
-    (minOf(a, c, r) == a || minOf(a, c, r) == c) &&
-            (minOf(a, c, s) == a || minOf(a, c, s) == c) -> true
+    (min(a, r) == a || min(b, r) == b) && (min(a, s) == a || min(b, s) == b) -> true
+    (min(b, r) == b || min(c, r) == c) && (min(b, s) == b || min(c, s) == c) -> true
+    (min(a, r) == a || min(c, r) == c) && (min(a, s) == a || min(c, s) == c) -> true
     else -> false
 }
