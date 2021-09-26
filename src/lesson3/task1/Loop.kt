@@ -2,10 +2,8 @@
 
 package lesson3.task1
 
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.sqrt
-import kotlin.math.pow
+import lesson1.task1.sqr
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -177,8 +175,8 @@ fun collatzSteps(x: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var number1 = m
     var number2 = n
-    while (number1 != number2){
-        if (number1 > number2){
+    while (number1 != number2) {
+        if (number1 > number2) {
             number1 += number2
             number2 = number1 - number2
             number1 -= number2
@@ -291,7 +289,23 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+
+fun cosTerm(x: Double, n: Double): Double =
+    if (n.toInt() % 2 == 1)
+        x.pow((n - 1.0) * 2.0) / factorial(((n - 1.0) * 2.0).toInt())
+    else -(x.pow((n - 1.0) * 2.0) / factorial(((n - 1.0) * 2.0).toInt()))
+
+fun cos(x: Double, eps: Double): Double {
+    var number = x
+    var i = 1.0
+    var cosinus = 0.0
+    while (number >= 2 * PI) number -= 2 * PI
+    while (abs(cosTerm(number, i)) >= eps) {
+        cosinus += cosTerm(number, i)
+        i++
+    }
+    return cosinus
+}
 
 /**
  * Сложная (4 балла)
@@ -302,7 +316,16 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var number = 0
+    var count = 0
+    while (count < n) {
+        number++
+        count += digitNumber(sqr(number))
+    }
+    return if (count == n) sqr(number) % 10 else
+        sqr(number) / (10.0.pow(count - n)).toInt() - sqr(number) / (10.0.pow(count - n + 1)).toInt() * 10
+}
 
 /**
  * Сложная (5 баллов)
