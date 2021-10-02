@@ -235,7 +235,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
 
 /**
  * Средняя (3 балла)
@@ -244,7 +244,15 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var list: List<Int> = listOf()
+    var number = n
+    do {
+        list = list + number % base
+        number /= base
+    } while (number > 0)
+    return list.asReversed()
+}
 
 /**
  * Сложная (4 балла)
@@ -257,7 +265,54 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+
+fun convertToChar(n: Int): Char = when (n) {
+    0 -> '0'
+    1 -> '1'
+    2 -> '2'
+    3 -> '3'
+    4 -> '4'
+    5 -> '5'
+    6 -> '6'
+    7 -> '7'
+    8 -> '8'
+    9 -> '9'
+    10 -> 'a'
+    11 -> 'b'
+    12 -> 'c'
+    13 -> 'd'
+    14 -> 'e'
+    15 -> 'f'
+    16 -> 'g'
+    17 -> 'h'
+    18 -> 'i'
+    19 -> 'j'
+    20 -> 'k'
+    21 -> 'l'
+    22 -> 'm'
+    23 -> 'n'
+    24 -> 'o'
+    25 -> 'p'
+    26 -> 'q'
+    27 -> 'r'
+    28 -> 's'
+    29 -> 't'
+    30 -> 'u'
+    31 -> 'v'
+    32 -> 'w'
+    33 -> 'x'
+    34 -> 'y'
+    else -> 'z'
+}
+
+fun convertToString(n: Int, base: Int): String {
+    val list = convert(n, base)
+    var string = ""
+    for (i in list.indices) {
+        string += convertToChar(list[i])
+    }
+    return string
+}
 
 /**
  * Средняя (3 балла)
@@ -266,7 +321,15 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var i = digits.size
+    var sum = 0
+    do {
+        i--
+        sum += digits[digits.size - i - 1] * base.toDouble().pow(i).toInt()
+    } while (i > 0)
+    return sum
+}
 
 /**
  * Сложная (4 балла)
@@ -280,7 +343,53 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+
+fun convertToInt(n: Char) = when (n) {
+    '0' -> 0
+    '1' -> 1
+    '2' -> 2
+    '3' -> 3
+    '4' -> 4
+    '5' -> 5
+    '6' -> 6
+    '7' -> 7
+    '8' -> 8
+    '9' -> 9
+    'a' -> 10
+    'b' -> 11
+    'c' -> 12
+    'd' -> 13
+    'e' -> 14
+    'f' -> 15
+    'g' -> 16
+    'h' -> 17
+    'i' -> 18
+    'j' -> 19
+    'k' -> 20
+    'l' -> 21
+    'm' -> 22
+    'n' -> 23
+    'o' -> 24
+    'p' -> 25
+    'q' -> 26
+    'r' -> 27
+    's' -> 28
+    't' -> 29
+    'u' -> 30
+    'v' -> 31
+    'w' -> 32
+    'x' -> 33
+    'y' -> 34
+    else -> 35
+}
+
+fun decimalFromString(str: String, base: Int): Int {
+    var list: List<Int> = listOf()
+    for (i in str.indices) {
+        list = list + convertToInt(str[i])
+    }
+    return decimal(list, base)
+}
 
 /**
  * Сложная (5 баллов)
@@ -290,7 +399,60 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+
+fun romanThousands(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "M"
+    2 -> "MM"
+    else -> "MMM"
+}
+
+fun romanHundreds(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "C"
+    2 -> "CC"
+    3 -> "CCC"
+    4 -> "CD"
+    5 -> "D"
+    6 -> "DC"
+    7 -> "DCC"
+    8 -> "DCCC"
+    else -> "CM"
+}
+
+fun romanDozens(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "X"
+    2 -> "XX"
+    3 -> "XXX"
+    4 -> "XL"
+    5 -> "L"
+    6 -> "LX"
+    7 -> "LXX"
+    8 -> "LXXX"
+    else -> "XC"
+}
+
+fun romanUnits(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "I"
+    2 -> "II"
+    3 -> "III"
+    4 -> "IV"
+    5 -> "V"
+    6 -> "VI"
+    7 -> "VII"
+    8 -> "VIII"
+    else -> "IX"
+}
+
+fun roman(n: Int): String {
+    val thousands = n / 1000
+    val hundreds = n / 100 - n / 1000 * 10
+    val dozens = n / 10 - n / 100 * 10
+    val units = n % 10
+    return romanThousands(thousands) + romanHundreds(hundreds) + romanDozens(dozens) + romanUnits(units)
+}
 
 /**
  * Очень сложная (7 баллов)
