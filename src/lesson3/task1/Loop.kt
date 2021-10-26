@@ -114,11 +114,11 @@ fun fib(n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var i = 2
-    while (i <= n) {
+    while (i <= n / 2) {
         if (n % i == 0) return i
         i++
     }
-    return i
+    return n
 }
 
 /**
@@ -157,11 +157,10 @@ fun collatzSteps(x: Int): Int {
     while (number > 1) {
         if (number % 2 == 0) {
             number /= 2
-            count++
         } else {
             number = 3 * number + 1
-            count++
         }
+        count++
     }
     return count
 }
@@ -194,12 +193,12 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var i = 2
-    while (i <= max(m, n) / 2) {
-        if (m % i == 0 && n % i == 0) return false
-        i++
+    var a = m
+    var b = n
+    while (a > 0 && b > 0) {
+        if (a > b) a %= b else b %= a
     }
-    return true
+    return (a + b == 1)
 }
 
 /**
@@ -229,14 +228,9 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var numberOfDigits = 1
+    val numberOfDigits = digitNumber(n)
     var number = n
-    while (number > 9) {
-        numberOfDigits++
-        number /= 10
-    }
     if (numberOfDigits == 1) return true
-    number = n
     for (i in 1..numberOfDigits / 2) {
         if (number % 10 != number / (10.0.pow((numberOfDigits - (2 * i - 1)).toDouble())).toInt()) return false
         number /= 10
@@ -287,8 +281,7 @@ fun sin(x: Double, eps: Double): Double {
     var number = x
     var i = 1.0
     var sinus = 0.0
-    while (number >= 2 * PI) number -= 2 * PI
-    while (number <= 0) number += 2 * PI
+    number %= 2 * PI
     while (abs(sinTerm(number, i)) >= eps) {
         sinus += sinTerm(number, i)
         i++
@@ -315,8 +308,7 @@ fun cos(x: Double, eps: Double): Double {
     var number = x
     var i = 1.0
     var cosinus = 0.0
-    while (number >= 2 * PI) number -= 2 * PI
-    while (number <= 0) number += 2 * PI
+    number %= 2 * PI
     while (abs(cosTerm(number, i)) >= eps) {
         cosinus += cosTerm(number, i)
         i++
