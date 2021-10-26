@@ -392,4 +392,101 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+
+fun russianDozens(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "один"
+    2 -> "два"
+    3 -> "три"
+    4 -> "четыре"
+    5 -> "пять"
+    6 -> "шесть"
+    7 -> "семь"
+    8 -> "восемь"
+    9 -> "девять"
+    10 -> "десять "
+    11 -> "одиннадцать "
+    12 -> "двенадцать "
+    13 -> "тринадцать "
+    14 -> "четырнадцать "
+    15 -> "пятнадцать "
+    16 -> "шестнадцать "
+    17 -> "семнадцать "
+    18 -> "восемнадцать "
+    19 -> "девятнадцать "
+    in 20..29 -> "двадцать " + russianDozens(n % 10)
+    in 30..39 -> "тридцать " + russianDozens(n % 10)
+    in 40..49 -> "сорок " + russianDozens(n % 10)
+    in 50..59 -> "пятьдесят " + russianDozens(n % 10)
+    in 60..69 -> "шестьдесят " + russianDozens(n % 10)
+    in 70..79 -> "семьдесят " + russianDozens(n % 10)
+    in 80..89 -> "восемьдесят " + russianDozens(n % 10)
+    else -> "девяносто " + russianDozens(n % 10)
+}
+
+fun russianHundreds(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "сто "
+    2 -> "двести "
+    3 -> "триста "
+    4 -> "четыреста "
+    5 -> "пятьсот "
+    6 -> "шестьсот "
+    7 -> "семьсот "
+    8 -> "восемьсот "
+    else -> "девятьсот "
+}
+
+fun russianThousands(n: Int): String = when {
+    (n in 10..20) || (n % 10 == 0) || (n % 10 == 5) || (n % 10 == 6) ||
+            (n % 10 == 7) || (n % 10 == 8) || (n % 10 == 9) -> "тысяч "
+    n % 10 == 1 -> "тысяча "
+    else -> "тысячи "
+}
+
+fun russianThousandsDozens(n: Int): String = when (n) {
+    0 -> ""
+    1 -> "одна "
+    2 -> "две "
+    3 -> "три "
+    4 -> "четыре "
+    5 -> "пять "
+    6 -> "шесть "
+    7 -> "семь "
+    8 -> "восемь "
+    9 -> "девять "
+    10 -> "десять "
+    11 -> "одиннадцать "
+    12 -> "двенадцать "
+    13 -> "тринадцать "
+    14 -> "четырнадцать "
+    15 -> "пятнадцать "
+    16 -> "шестнадцать "
+    17 -> "семнадцать "
+    18 -> "восемнадцать "
+    19 -> "девятнадцать "
+    in 20..29 -> "двадцать " + russianThousandsDozens(n % 10)
+    in 30..39 -> "тридцать " + russianThousandsDozens(n % 10)
+    in 40..49 -> "сорок " + russianThousandsDozens(n % 10)
+    in 50..59 -> "пятьдесят " + russianThousandsDozens(n % 10)
+    in 60..69 -> "шестьдесят " + russianThousandsDozens(n % 10)
+    in 70..79 -> "семьдесят " + russianThousandsDozens(n % 10)
+    in 80..89 -> "восемьдесят " + russianThousandsDozens(n % 10)
+    else -> "девяносто" + russianThousandsDozens(n % 10)
+}
+
+fun russian(n: Int): String {
+    var number = n
+    var string = ""
+    string += russianDozens(number % 100)
+    if (number / 100 == 0) return string.trim()
+    number /= 100
+    string = russianHundreds(number % 10) + string
+    if (number / 10 == 0) return string.trim()
+    number /= 10
+    string = russianThousandsDozens(number % 100) + russianThousands(number % 100) + string
+    if (number / 100 == 0) return string.trim()
+    number /= 100
+    string = russianHundreds(number % 10) + string
+    return string.trim()
+}
