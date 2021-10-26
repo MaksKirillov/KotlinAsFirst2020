@@ -4,8 +4,8 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.min
-import kotlin.math.sqrt
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -146,7 +146,7 @@ fun mean(list: List<Double>): Double = when {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
-    val averageElement = list.sum() / list.size
+    val averageElement = mean(list)
     for (i in list.indices) {
         list[i] -= averageElement
     }
@@ -245,10 +245,10 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var list: List<Int> = listOf()
+    val list = mutableListOf<Int>()
     var number = n
     do {
-        list = list + number % base
+        list.add(number % base)
         number /= base
     } while (number > 0)
     return list.asReversed()
@@ -265,7 +265,6 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-
 fun convertToChar(n: Int): Char = when (n) {
     0 -> '0'
     1 -> '1'
@@ -307,11 +306,11 @@ fun convertToChar(n: Int): Char = when (n) {
 
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
-    var string = ""
+    val string = StringBuilder()
     for (i in list.indices) {
-        string += convertToChar(list[i])
+        string.append(convertToChar(list[i]))
     }
-    return string
+    return string.toString()
 }
 
 /**
@@ -384,9 +383,9 @@ fun convertToInt(n: Char) = when (n) {
 }
 
 fun decimalFromString(str: String, base: Int): Int {
-    var list: List<Int> = listOf()
+    val list = mutableListOf<Int>()
     for (i in str.indices) {
-        list = list + convertToInt(str[i])
+        list.add(convertToInt(str[i]))
     }
     return decimal(list, base)
 }
