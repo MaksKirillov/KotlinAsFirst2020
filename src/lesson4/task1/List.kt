@@ -395,15 +395,15 @@ fun roman(n: Int): String {
 
 fun russianDozens(n: Int): String = when (n) {
     0 -> ""
-    1 -> "один"
-    2 -> "два"
-    3 -> "три"
-    4 -> "четыре"
-    5 -> "пять"
-    6 -> "шесть"
-    7 -> "семь"
-    8 -> "восемь"
-    9 -> "девять"
+    1 -> "один "
+    2 -> "два "
+    3 -> "три "
+    4 -> "четыре "
+    5 -> "пять "
+    6 -> "шесть "
+    7 -> "семь "
+    8 -> "восемь "
+    9 -> "девять "
     10 -> "десять "
     11 -> "одиннадцать "
     12 -> "двенадцать "
@@ -472,7 +472,7 @@ fun russianThousandsDozens(n: Int): String = when (n) {
     in 60..69 -> "шестьдесят " + russianThousandsDozens(n % 10)
     in 70..79 -> "семьдесят " + russianThousandsDozens(n % 10)
     in 80..89 -> "восемьдесят " + russianThousandsDozens(n % 10)
-    else -> "девяносто" + russianThousandsDozens(n % 10)
+    else -> "девяносто " + russianThousandsDozens(n % 10)
 }
 
 fun russian(n: Int): String {
