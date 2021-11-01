@@ -126,14 +126,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var i = n - 1
-    while (i > 0) {
-        if (n % i == 0) return i
-        i--
-    }
-    return i
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -278,12 +271,13 @@ fun sinTerm(x: Double, n: Double): Double =
     else -(x.pow(n * 2.0 - 1.0) / factorial((n * 2.0 - 1.0).toInt()))
 
 fun sin(x: Double, eps: Double): Double {
-    var number = x
+    val number = x % (2 * PI)
     var i = 1.0
     var sinus = 0.0
-    number %= 2 * PI
-    while (abs(sinTerm(number, i)) >= eps) {
-        sinus += sinTerm(number, i)
+    var sin = sinTerm(number, i)
+    while (abs(sin) >= eps) {
+        sin = sinTerm(number, i)
+        sinus += sin
         i++
     }
     return sinus
@@ -305,12 +299,13 @@ fun cosTerm(x: Double, n: Double): Double =
     else -(x.pow((n - 1.0) * 2.0) / factorial(((n - 1.0) * 2.0).toInt()))
 
 fun cos(x: Double, eps: Double): Double {
-    var number = x
+    val number = x % (2 * PI)
     var i = 1.0
     var cosinus = 0.0
-    number %= 2 * PI
-    while (abs(cosTerm(number, i)) >= eps) {
-        cosinus += cosTerm(number, i)
+    var cos = cosTerm(number, i)
+    while (abs(cos) >= eps) {
+        cos = cosTerm(number, i)
+        cosinus += cos
         i++
     }
     return cosinus
