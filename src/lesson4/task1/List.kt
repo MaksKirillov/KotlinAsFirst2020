@@ -178,7 +178,6 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
     var sum = 0
     for (i in p.indices) {
         sum += p[i] * (x.toDouble().pow(i)).toInt()
@@ -197,7 +196,6 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
     var sum = 0
     for (i in 0 until list.size) {
         sum += list[i]
