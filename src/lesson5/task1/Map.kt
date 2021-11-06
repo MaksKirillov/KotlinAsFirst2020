@@ -96,21 +96,21 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun gradeMap(n: Int, map: Map<String, Int>): Pair<Int, List<String>> {
+fun gradeMap(n: Int, map: Map<String, Int>): List<String> {
     val gradeList = mutableListOf<String>()
-    return if (map.containsValue(n)) {
-        for ((key, value) in map) {
-            if (n == value) gradeList.add(key)
-        }
-        (n to gradeList)
-    } else {
-        (0 to listOf(""))
+    for ((key, value) in map) {
+        if (n == value) gradeList.add(key)
     }
+    return gradeList
 }
 
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var map = mapOf<Int, List<String>>()
-    map = map + gradeMap(2, grades) + gradeMap(3, grades) + gradeMap(4, grades) + gradeMap(5, grades) - 0
+    val map = mutableMapOf<Int, List<String>>()
+    for (i in 2..5) {
+        if (grades.containsValue(i)) {
+            map[i] = gradeMap(i, grades)
+        }
+    }
     return map
 }
 
@@ -183,7 +183,27 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhone(mapA: Map<String, String>, mapB: Map<String, String>, name: String): String {
+    val set = mutableSetOf<String>()
+    for ((key, value) in mapA) {
+        if (key == name) set.add(value)
+    }
+    for ((key, value) in mapB) {
+        if (key == name) set.add(value)
+    }
+    return set.joinToString(", ")
+}
+
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val map = mutableMapOf<String, String>()
+    val set = mutableSetOf<String>()
+    for ((key) in mapA) set.add(key)
+    for ((key) in mapB) set.add(key)
+    for (item in set) {
+        map[item] = mergePhone(mapA, mapB, item)
+    }
+    return map
+}
 
 /**
  * Средняя (4 балла)
@@ -195,7 +215,27 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPriceOfItem(stockPrices: List<Pair<String, Double>>, name: String): Double {
+    var number = 0.0
+    var k = 0
+    for ((first, second) in stockPrices) {
+        if (first == name) {
+            k++
+            number += second
+        }
+    }
+    return number / k
+}
+
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val map = mutableMapOf<String, Double>()
+    val set = mutableSetOf<String>()
+    for ((key) in stockPrices) set.add(key)
+    for (item in set) {
+        map[item] = averageStockPriceOfItem(stockPrices, item)
+    }
+    return map
+}
 
 /**
  * Средняя (4 балла)
