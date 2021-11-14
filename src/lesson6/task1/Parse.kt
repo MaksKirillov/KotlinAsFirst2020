@@ -74,7 +74,35 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun leapYear(year: String): Boolean = when {
+    year.toInt() % 400 == 0 -> true
+    year.toInt() % 100 == 0 -> false
+    year.toInt() % 4 == 0 -> true
+    else -> false
+}
+
+fun dateStrToDigit(str: String): String {
+    val parts = ("$str ").split(" ")
+    if (parts.size != 4) return ""
+    val months = listOf(
+        "января", "февраля", "марта", "апреля",
+        "мая", "июня", "июля", "августа",
+        "сентября", "октября", "ноября", "декабря"
+    )
+    val days = listOf(
+        31, 28, 31, 30,
+        31, 30, 31, 31,
+        30, 31, 30, 31
+    )
+    val month: String
+    if (months.indexOf(parts[1]) != -1) {
+        month = twoDigitStr(months.indexOf(parts[1]) + 1)
+    } else return ""
+    val leap = leapYear(parts[2])
+    return if ((parts[0].toInt() in 1..days[month.toInt() - 1] ||
+                (leap && parts[0].toInt() in 1..days[month.toInt() - 1] + 1))
+    ) "${twoDigitStr(parts[0].toInt())}.${month}.${parts[2]}" else ""
+}
 
 /**
  * Средняя (4 балла)
@@ -86,7 +114,31 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = ("$digital.").split(".")
+    if (parts.size != 4) return ""
+    for (i in 0..2) {
+        if (!parts[i].matches(".*\\d+.*".toRegex())) return ""
+    }
+    val days = listOf(
+        31, 28, 31, 30,
+        31, 30, 31, 31,
+        30, 31, 30, 31
+    )
+    val months = listOf(
+        "января", "февраля", "марта", "апреля",
+        "мая", "июня", "июля", "августа",
+        "сентября", "октября", "ноября", "декабря"
+    )
+    val month: String
+    if (parts[1].toInt() in 1..12) {
+        month = months[parts[1].toInt() - 1]
+    } else return ""
+    val leap = leapYear(parts[2])
+    return if ((parts[0].toInt() in 1..days[parts[1].toInt() - 1] ||
+                (leap && parts[0].toInt() in 1..days[parts[1].toInt() - 1] + 1))
+    ) "${parts[0].toInt()} $month ${parts[2]}" else ""
+}
 
 /**
  * Средняя (4 балла)
