@@ -105,6 +105,7 @@ fun gradeMap(n: Int, map: Map<String, Int>): List<String> {
 }
 
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    if (grades.containsValue(0)) return mapOf(0 to listOf<String>())
     val map = mutableMapOf<Int, List<String>>()
     for (i in 2..5) {
         if (grades.containsValue(i)) {
@@ -401,7 +402,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var remainCapacity = capacity
     val pickedTreasure = mutableSetOf<String>()
     var treasureRemained = true
-    while (treasureRemained) {
+    while (treasureRemained && newTreasures.isNotEmpty()) {
         for ((key, value) in newTreasures) {
             if (coefficient == value.second && remainCapacity >= value.first) {
                 remainCapacity -= value.first
