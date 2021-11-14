@@ -105,7 +105,7 @@ fun gradeMap(n: Int, map: Map<String, Int>): List<String> {
 }
 
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    if (grades.containsValue(0)) return mapOf(0 to listOf<String>())
+    if (grades.containsValue(0)) return mapOf(0 to listOf(""))
     val map = mutableMapOf<Int, List<String>>()
     for (i in 2..5) {
         if (grades.containsValue(i)) {
