@@ -401,15 +401,18 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var remainCapacity = capacity
     val pickedTreasure = mutableSetOf<String>()
     var treasureRemained = true
+    var removeKey = ""
     while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0) {
         for ((key, value) in newTreasures) {
             if (coefficient == value.second && remainCapacity >= value.first) {
                 remainCapacity -= value.first
                 pickedTreasure.add(key)
-                newTreasures[key] = Pair(10000, 0)
-                coefficient = newCoefficient(newTreasures, coefficient)
+                removeKey = key
+                continue
             }
         }
+        if (newTreasures.containsKey(removeKey)) newTreasures.remove(removeKey)
+        coefficient = newCoefficient(newTreasures, coefficient)
         treasureRemained = false
         for ((_, value) in newTreasures) {
             if (value.first <= remainCapacity) treasureRemained = true
