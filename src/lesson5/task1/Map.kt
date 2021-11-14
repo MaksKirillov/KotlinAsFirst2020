@@ -380,8 +380,8 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun newCoefficient(treasures: Map<String, Pair<Int, Int>>, coefficient: Int): Int {
-    var max = 0
+fun newCoefficient(treasures: Map<String, Pair<Int, Double>>, coefficient: Double): Double {
+    var max = 0.0
     for ((_, value) in treasures) {
         if (value.second > max) max = value.second
     }
@@ -389,12 +389,12 @@ fun newCoefficient(treasures: Map<String, Pair<Int, Int>>, coefficient: Int): In
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val newTreasures = mutableMapOf<String, Pair<Int, Int>>()
-    var coefficient = 0
+    val newTreasures = mutableMapOf<String, Pair<Int, Double>>()
+    var coefficient = 0.0
     for ((key, value) in treasures) {
         if (value.first <= capacity) {
-            newTreasures[key] = Pair(value.first, value.second / value.first)
-            if (value.second / value.first > coefficient) coefficient = value.second / value.first
+            newTreasures[key] = Pair(value.first, value.second.toDouble() / value.first)
+            if (value.second.toDouble() / value.first > coefficient) coefficient = value.second.toDouble() / value.first
         }
     }
 
@@ -402,7 +402,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val pickedTreasure = mutableSetOf<String>()
     var treasureRemained = true
     var removeKey = ""
-    while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0) {
+    while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0.0) {
         for ((key, value) in newTreasures) {
             if (coefficient == value.second && remainCapacity >= value.first) {
                 remainCapacity -= value.first
