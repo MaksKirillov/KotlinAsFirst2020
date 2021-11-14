@@ -100,7 +100,7 @@ fun dateStrToDigit(str: String): String {
     } else return ""
     val leap = leapYear(parts[2])
     return if ((parts[0].toInt() in 1..days[month.toInt() - 1] ||
-                (leap && parts[0].toInt() in 1..days[month.toInt() - 1] + 1))
+                (month.toInt() == 2 && leap && parts[0].toInt() in 1..days[month.toInt() - 1] + 1))
     ) "${twoDigitStr(parts[0].toInt())}.${month}.${parts[2]}" else ""
 }
 
@@ -136,7 +136,7 @@ fun dateDigitToStr(digital: String): String {
     } else return ""
     val leap = leapYear(parts[2])
     return if ((parts[0].toInt() in 1..days[parts[1].toInt() - 1] ||
-                (leap && parts[0].toInt() in 1..days[parts[1].toInt() - 1] + 1))
+                (parts[1].toInt() == 2 && leap && parts[0].toInt() in 1..days[parts[1].toInt() - 1] + 1))
     ) "${parts[0].toInt()} $month ${parts[2]}" else ""
 }
 
