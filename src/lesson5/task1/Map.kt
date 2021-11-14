@@ -346,7 +346,18 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var pair = Pair(-1, -1)
+    for (i in 0 until list.size - 1) {
+        for (j in i + 1 until list.size) {
+            if (list[i] + list[j] == number) {
+                pair = Pair(i, j)
+                break
+            }
+        }
+    }
+    return pair
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -369,4 +380,40 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun newCoefficient(treasures: Map<String, Pair<Int, Int>>, coefficient: Int): Int {
+    var max = 0
+    for ((_, value) in treasures) {
+        if (value.second > max) max = value.second
+    }
+    return max
+}
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val newTreasures = mutableMapOf<String, Pair<Int, Int>>()
+    var coefficient = 0
+    for ((key, value) in treasures) {
+        if (value.first <= capacity) {
+            newTreasures[key] = Pair(value.first, value.second / value.first)
+            if (value.second / value.first > coefficient) coefficient = value.second / value.first
+        }
+    }
+
+    var remainCapacity = capacity
+    val pickedTreasure = mutableSetOf<String>()
+    var treasureRemained = true
+    while (treasureRemained) {
+        for ((key, value) in newTreasures) {
+            if (coefficient == value.second && remainCapacity >= value.first) {
+                remainCapacity -= value.first
+                pickedTreasure.add(key)
+                newTreasures.remove(key)
+                coefficient = newCoefficient(newTreasures, coefficient)
+            }
+        }
+        treasureRemained = false
+        for ((_, value) in newTreasures) {
+            if (value.first <= remainCapacity) treasureRemained = true
+        }
+    }
+    return pickedTreasure
+}
