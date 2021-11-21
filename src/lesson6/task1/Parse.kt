@@ -74,6 +74,17 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
+val months = listOf(
+    "января", "февраля", "марта", "апреля",
+    "мая", "июня", "июля", "августа",
+    "сентября", "октября", "ноября", "декабря"
+)
+val days = listOf(
+    31, 28, 31, 30,
+    31, 30, 31, 31,
+    30, 31, 30, 31
+)
+
 fun leapYear(year: String): Boolean = when {
     year.toInt() % 400 == 0 -> true
     year.toInt() % 100 == 0 -> false
@@ -85,16 +96,6 @@ fun dateStrToDigit(str: String): String {
     try {
         val parts = ("$str ").split(" ")
         if (parts.size != 4) return ""
-        val months = listOf(
-            "января", "февраля", "марта", "апреля",
-            "мая", "июня", "июля", "августа",
-            "сентября", "октября", "ноября", "декабря"
-        )
-        val days = listOf(
-            31, 28, 31, 30,
-            31, 30, 31, 31,
-            30, 31, 30, 31
-        )
         val month: String
         if (months.indexOf(parts[1]) != -1) {
             month = twoDigitStr(months.indexOf(parts[1]) + 1)
@@ -122,16 +123,6 @@ fun dateDigitToStr(digital: String): String {
     try {
         val parts = ("$digital.").split(".")
         if (parts.size != 4) return ""
-        val days = listOf(
-            31, 28, 31, 30,
-            31, 30, 31, 31,
-            30, 31, 30, 31
-        )
-        val months = listOf(
-            "января", "февраля", "марта", "апреля",
-            "мая", "июня", "июля", "августа",
-            "сентября", "октября", "ноября", "декабря"
-        )
         val month: String
         if (parts[1].toInt() in 1..12) {
             month = months[parts[1].toInt() - 1]

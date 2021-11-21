@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import java.util.concurrent.TimeoutException
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -185,11 +187,11 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  */
 fun mergePhone(mapA: Map<String, String>, mapB: Map<String, String>, name: String): String {
     val set = mutableSetOf<String>()
-    for ((key, value) in mapA) {
-        if (key == name) set.add(value)
+    if (name in mapA) {
+        set.add(mapA[name]!!)
     }
-    for ((key, value) in mapB) {
-        if (key == name) set.add(value)
+    if (name in mapB) {
+        set.add(mapB[name]!!)
     }
     return set.joinToString(", ")
 }
@@ -349,11 +351,9 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var pair = Pair(-1, -1)
     for (i in 0 until list.size - 1) {
-        for (j in i + 1 until list.size) {
-            if (list[i] + list[j] == number) {
-                pair = Pair(i, j)
-                break
-            }
+        if (number - list[i] in list && list[i] != number - list[i]) {
+            pair = Pair(i, list.indexOf(number - list[i]))
+            break
         }
     }
     return pair
@@ -402,21 +402,26 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val pickedTreasure = mutableSetOf<String>()
     var treasureRemained = true
     var removeKey = ""
-    while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0.0) {
-        for ((key, value) in newTreasures) {
-            if (coefficient == value.second && remainCapacity >= value.first) {
-                remainCapacity -= value.first
-                pickedTreasure.add(key)
-                removeKey = key
-                continue
+    try {
+        while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0.0) {
+            for ((key, value) in newTreasures) {
+                if (coefficient == value.second && remainCapacity >= value.first) {
+                    remainCapacity -= value.first
+                    pickedTreasure.add(key)
+                    removeKey = key
+                    continue
+                }
+            }
+            if (newTreasures.containsKey(removeKey)) newTreasures.remove(removeKey)
+            coefficient = newCoefficient(newTreasures, coefficient)
+            treasureRemained = false
+            for ((_, value) in newTreasures) {
+                if (value.first <= remainCapacity) treasureRemained = true
             }
         }
-        if (newTreasures.containsKey(removeKey)) newTreasures.remove(removeKey)
-        coefficient = newCoefficient(newTreasures, coefficient)
-        treasureRemained = false
-        for ((_, value) in newTreasures) {
-            if (value.first <= remainCapacity) treasureRemained = true
-        }
+        return pickedTreasure
+    } catch (e: TimeoutException) {
+        return pickedTreasure
     }
-    return pickedTreasure
+
 }
