@@ -2,7 +2,8 @@
 
 package lesson5.task1
 
-import java.util.concurrent.TimeoutException
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -348,11 +349,29 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
+fun findKeyForValue(map: Map<Int, Pair<Int, Int>>, value: Pair<Int, Int>): Int {
+    var key = 0
+    for ((key1, value1) in map) {
+        if (value1 == value) {
+            key = key1
+            break
+        }
+    }
+    return key
+}
+
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var pair = Pair(-1, -1)
-    for (i in 0 until list.size - 1) {
-        if (number - list[i] in list && list[i] != number - list[i]) {
-            pair = Pair(i, list.indexOf(number - list[i]))
+    val mapOne = mutableMapOf<Int, Pair<Int, Int>>()
+    val mapTwo = mutableMapOf<Int, Pair<Int, Int>>()
+    for (i in list.indices) {
+        mapOne[i] = Pair(list[i], number - list[i])
+        mapTwo[i] = Pair(number - list[i], list[i])
+    }
+    for (i in list.indices) {
+        val keyTwo = findKeyForValue(mapTwo, mapOne[i]!!)
+        if (mapTwo.containsValue(mapOne[i]) && i != keyTwo) {
+            pair = Pair(min(i, keyTwo), max(i, keyTwo))
             break
         }
     }
@@ -380,48 +399,39 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun newCoefficient(treasures: Map<String, Pair<Int, Double>>, coefficient: Double): Double {
-    var max = 0.0
-    for ((_, value) in treasures) {
-        if (value.second > max) max = value.second
+
+fun findNameAndMassForCoefficient(map: MutableMap<String, Pair<Int, Double>>, k: Double): Pair<String, Int> {
+    var pair = Pair("", 0)
+    for ((key, value) in map) {
+        if (value.second == k) {
+            pair = Pair(key, value.first)
+            map.remove(key)
+            break
+        }
     }
-    return max
+    return pair
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val newTreasures = mutableMapOf<String, Pair<Int, Double>>()
-    var coefficient = 0.0
+    val listCoefficient = mutableListOf<Double>()
+    val leftTreasures = mutableMapOf<String, Pair<Int, Double>>()
     for ((key, value) in treasures) {
         if (value.first <= capacity) {
-            newTreasures[key] = Pair(value.first, value.second.toDouble() / value.first)
-            if (value.second.toDouble() / value.first > coefficient) coefficient = value.second.toDouble() / value.first
+            leftTreasures[key] = Pair(value.first, value.second.toDouble() / value.first)
+            listCoefficient.add(value.second.toDouble() / value.first)
         }
     }
-
-    var remainCapacity = capacity
-    val pickedTreasure = mutableSetOf<String>()
-    var treasureRemained = true
-    var removeKey = ""
-    try {
-        while (treasureRemained && newTreasures.isNotEmpty() && coefficient != 0.0) {
-            for ((key, value) in newTreasures) {
-                if (coefficient == value.second && remainCapacity >= value.first) {
-                    remainCapacity -= value.first
-                    pickedTreasure.add(key)
-                    removeKey = key
-                    continue
-                }
-            }
-            if (newTreasures.containsKey(removeKey)) newTreasures.remove(removeKey)
-            coefficient = newCoefficient(newTreasures, coefficient)
-            treasureRemained = false
-            for ((_, value) in newTreasures) {
-                if (value.first <= remainCapacity) treasureRemained = true
-            }
+    val list = listCoefficient.sortedDescending()
+    val set = mutableSetOf<String>()
+    var takenCapacity = 0
+    for (k in list) {
+        val pair = findNameAndMassForCoefficient(leftTreasures, k)
+        set.add(pair.first)
+        takenCapacity += pair.second
+        if (takenCapacity > capacity) {
+            set.remove(pair.first)
+            break
         }
-        return pickedTreasure
-    } catch (e: TimeoutException) {
-        return pickedTreasure
     }
-
+    return set
 }
