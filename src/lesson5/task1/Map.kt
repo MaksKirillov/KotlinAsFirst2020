@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import lesson1.task1.sqr
 import java.lang.Integer.max
 import java.lang.Integer.min
 
@@ -417,8 +418,9 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val leftTreasures = mutableMapOf<String, Pair<Int, Double>>()
     for ((key, value) in treasures) {
         if (value.first <= capacity) {
-            leftTreasures[key] = Pair(value.first, value.second.toDouble() / value.first)
-            listCoefficient.add(value.second.toDouble() / value.first)
+            val coefficient = (value.second * capacity).toDouble() / sqr(value.first)
+            leftTreasures[key] = Pair(value.first, coefficient)
+            listCoefficient.add(coefficient)
         }
     }
     val list = listCoefficient.sortedDescending()
