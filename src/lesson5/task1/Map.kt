@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import lesson1.task1.sqr
 import java.lang.Integer.max
 import java.lang.Integer.min
 
@@ -400,40 +399,36 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-
-fun findNameAndMassForCoefficient(map: MutableMap<String, Pair<Int, Double>>, k: Double): Pair<String, Int> {
-    var pair = Pair("", 0)
-    for ((key, value) in map) {
-        if (value.second == k) {
-            pair = Pair(key, value.first)
-            map.remove(key)
-            break
-        }
-    }
-    return pair
-}
-
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val listCoefficient = mutableListOf<Double>()
-    val leftTreasures = mutableMapOf<String, Pair<Int, Double>>()
+    if (treasures.isEmpty()) return setOf()
+    val cell = mutableListOf<MutableList<Pair<Int, MutableSet<String>>>>()
+    val names = mutableListOf<String>()
+    val weights = mutableListOf<Int>()
+    val prices = mutableListOf<Int>()
+    var number = 0
     for ((key, value) in treasures) {
         if (value.first <= capacity) {
-            val coefficient = (value.second * capacity).toDouble() / sqr(value.first)
-            leftTreasures[key] = Pair(value.first, coefficient)
-            listCoefficient.add(coefficient)
+            names.add(key)
+            weights.add(value.first)
+            prices.add(value.second)
+            number++
         }
     }
-    val list = listCoefficient.sortedDescending()
-    val set = mutableSetOf<String>()
-    var takenCapacity = 0
-    for (k in list) {
-        val pair = findNameAndMassForCoefficient(leftTreasures, k)
-        set.add(pair.first)
-        takenCapacity += pair.second
-        if (takenCapacity > capacity) {
-            set.remove(pair.first)
-            break
+    for (i in 0..number) {
+        cell.add(mutableListOf())
+        for (j in 0..capacity) {
+            cell[i].add(Pair(0, mutableSetOf()))
+            when {
+                i == 0 || j == 0 -> continue
+                weights[i - 1] > j -> cell[i][j] = cell[i - 1][j]
+                cell[i - 1][j - weights[i - 1]].first + prices[i - 1] > cell[i - 1][j].first ->
+                    cell[i][j] = Pair(
+                        cell[i - 1][j - weights[i - 1]].first + prices[i - 1],
+                        (cell[i - 1][j - weights[i - 1]].second + names[i - 1]).toMutableSet()
+                    )
+                else -> cell[i][j] = cell[i - 1][j]
+            }
         }
     }
-    return set
+    return cell[number][capacity].second
 }
