@@ -242,7 +242,7 @@ fun mostExpensive(description: String): String {
         for (item in parts) {
             val pair = ("$item ").split(" ")
             goods[pair[0]] = pair[1].toDouble()
-            if (pair[1].toDouble() <= 0) return ""
+            if (pair[1].toDouble() < 0) return ""
             if (pair[1].toDouble() > max) max = pair[1].toDouble()
         }
         for ((key, value) in goods) {
