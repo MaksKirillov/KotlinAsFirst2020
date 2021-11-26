@@ -189,10 +189,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
 fun mergePhone(mapA: Map<String, String>, mapB: Map<String, String>, name: String): String {
     val set = mutableSetOf<String>()
     if (name in mapA) {
-        set.add(mapA[name]!!)
+        set.add(mapA[name].toString())
     }
     if (name in mapB) {
-        set.add(mapB[name]!!)
+        set.add(mapB[name].toString())
     }
     return set.joinToString(", ")
 }
@@ -218,25 +218,16 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPriceOfItem(stockPrices: List<Pair<String, Double>>, name: String): Double {
-    var number = 0.0
-    var k = 0
-    for ((first, second) in stockPrices) {
-        if (first == name) {
-            k++
-            number += second
-        }
-    }
-    return number / k
-}
-
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val map = mutableMapOf<String, Double>()
-    val set = mutableSetOf<String>()
-    for ((key) in stockPrices) set.add(key)
-    for (item in set) {
-        map[item] = averageStockPriceOfItem(stockPrices, item)
+    val sortedStock = mutableMapOf<String, Pair<Double, Int>>()
+    for ((key) in stockPrices) sortedStock[key] = Pair(0.0, 0)
+    for ((key, value) in stockPrices) {
+        val first = sortedStock[key]!!.first + value
+        val second = sortedStock[key]!!.second + 1
+        sortedStock[key] = Pair(first, second)
     }
+    val map = mutableMapOf<String, Double>()
+    for ((key, value) in sortedStock) map[key] = value.first / value.second
     return map
 }
 
@@ -350,14 +341,9 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findKeyForValue(map: Map<Int, Pair<Int, Int>>, value: Pair<Int, Int>): Int {
-    var key = 0
-    for ((key1, value1) in map) {
-        if (value1 == value) {
-            key = key1
-            break
-        }
-    }
-    return key
+    val reversedMap = mutableMapOf<Pair<Int, Int>, Int>()
+    for ((key, pair) in map) reversedMap[pair] = key
+    return reversedMap[value] ?: -1
 }
 
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
