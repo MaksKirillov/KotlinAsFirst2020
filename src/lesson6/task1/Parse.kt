@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import kotlin.IllegalArgumentException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -186,7 +188,28 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    try {
+        val parts = expression.split(" ")
+        var n = 1
+        var result = parts[0].toInt()
+        if ('+' in parts[0] || '-' in parts[0]) throw IllegalArgumentException()
+        while (n < parts.size) {
+            val sign = parts[n]
+            val number = parts[n + 1]
+            if ('+' in number || '-' in number) throw IllegalArgumentException()
+            when (sign) {
+                "+" -> result += number.toInt()
+                "-" -> result -= number.toInt()
+                else -> throw IllegalArgumentException()
+            }
+            n += 2
+        }
+        return result
+    } catch (e: NumberFormatException) {
+        throw IllegalArgumentException()
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -210,7 +233,26 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    try {
+        if (description.isEmpty()) return ""
+        val parts = (description).split("; ")
+        val goods = mutableMapOf<String, Double>()
+        var max = 0.0
+        for (item in parts) {
+            val pair = ("$item ").split(" ")
+            goods[pair[0]] = pair[1].toDouble()
+            if (pair[1].toDouble() <= 0) return ""
+            if (pair[1].toDouble() > max) max = pair[1].toDouble()
+        }
+        for ((key, value) in goods) {
+            if (value == max) return key
+        }
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+    return ""
+}
 
 /**
  * Сложная (6 баллов)
