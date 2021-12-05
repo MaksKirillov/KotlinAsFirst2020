@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import java.lang.Integer.max
-import java.lang.Integer.min
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -340,24 +338,18 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findKeyForValue(map: Map<Int, Pair<Int, Int>>, value: Pair<Int, Int>): Int {
-    val reversedMap = mutableMapOf<Pair<Int, Int>, Int>()
-    for ((key, pair) in map) reversedMap[pair] = key
-    return reversedMap[value] ?: -1
-}
 
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var pair = Pair(-1, -1)
-    val mapOne = mutableMapOf<Int, Pair<Int, Int>>()
-    val mapTwo = mutableMapOf<Int, Pair<Int, Int>>()
+    val listOfSubs = mutableListOf<Int>()
     for (i in list.indices) {
-        mapOne[i] = Pair(list[i], number - list[i])
-        mapTwo[i] = Pair(number - list[i], list[i])
+        listOfSubs.add(number - list[i])
     }
     for (i in list.indices) {
-        val keyTwo = findKeyForValue(mapTwo, mapOne[i]!!)
-        if (mapTwo.containsValue(mapOne[i]) && i != keyTwo) {
-            pair = Pair(min(i, keyTwo), max(i, keyTwo))
+        listOfSubs.remove(number - list[i])
+        listOfSubs.add(i, -1)
+        if (list[i] in listOfSubs) {
+            pair = Pair(i, listOfSubs.indexOf(list[i]))
             break
         }
     }
