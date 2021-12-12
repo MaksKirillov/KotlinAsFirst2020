@@ -235,8 +235,15 @@ class Tests {
     @Test
     @Tag("5")
     fun circleByThreePoints() {
-        val actual = circleByThreePoints(Point(5.0, 0.0), Point(3.0, 4.0), Point(0.0, -5.0))
-        val expected = Circle(Point(0.0, 0.0), 5.0)
+        var actual = circleByThreePoints(Point(5.0, 0.0), Point(3.0, 4.0), Point(0.0, -5.0))
+        var expected = Circle(Point(0.0, 0.0), 5.0)
+        assertApproxEquals(expected, actual, 1e-5)
+        actual = circleByThreePoints(
+            Point(-5e-324, -5e-324),
+            Point(0.0, 0.6800840568713096),
+            Point(0.8507667080609587, 2.220446049250313e-16)
+        )
+        expected = Circle(Point(0.42538335403047933, 0.3400420284356549), 0.5445912035544228)
         assertApproxEquals(expected, actual, 1e-5)
     }
 
