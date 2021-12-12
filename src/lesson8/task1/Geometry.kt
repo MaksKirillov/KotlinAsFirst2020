@@ -292,7 +292,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     for (point in set) {
         if (!maxDiameterCircle.contains(point)) contains = false
     }
-    if (!contains) radius *= 10
+    if (!contains) radius *= radius
     for (point1 in 0..set.size - 3) {
         for (point2 in point1 + 1..set.size - 2) {
             for (point3 in point2 + 1 until set.size) {
