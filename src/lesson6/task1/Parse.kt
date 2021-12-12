@@ -208,6 +208,8 @@ fun plusMinus(expression: String): Int {
         return result
     } catch (e: NumberFormatException) {
         throw IllegalArgumentException()
+    } catch (e: IndexOutOfBoundsException) {
+        throw IllegalArgumentException()
     }
 }
 

@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.time.milliseconds
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -63,21 +64,21 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    for (line in File(inputName).readLines()) {
-        when {
-            line.isEmpty() -> {
-                writer.write("")
-                writer.newLine()
+    File(outputName).bufferedWriter().use { writer ->
+        for (line in File(inputName).readLines()) {
+            when {
+                line.isEmpty() -> {
+                    writer.write("")
+                    writer.newLine()
+                }
+                '_' != line[0] -> {
+                    writer.write(line)
+                    writer.newLine()
+                }
+                else -> continue
             }
-            '_' != line[0] -> {
-                writer.write(line)
-                writer.newLine()
-            }
-            else -> continue
         }
     }
-    writer.close()
 }
 
 /**
@@ -91,27 +92,34 @@ fun deleteMarked(inputName: String, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
-    val input = File(inputName).readText().lowercase()
-    for (item in substrings) {
-        val substring = item.lowercase()
-        val length = item.length
-        var numberOfSubstrings = 0
-        var numberOfChar = 0
-        for (char in input) {
-            var numberOfCharInSub = 0
-            if (char == substring[numberOfCharInSub]) {
-                for (numberOfInput in numberOfChar until numberOfChar + length) {
-                    if (input[numberOfInput] == substring[numberOfCharInSub]) {
-                        numberOfCharInSub++
-                        if (numberOfCharInSub == length) numberOfSubstrings++
-                    } else {
-                        break
+    File(inputName).forEachLine {
+        for (item in substrings) {
+            val substring = item.lowercase()
+            val length = item.length
+            val input = it.lowercase()
+            var numberOfSubstrings = 0
+            var numberOfChar = 0
+            for (char in input) {
+                var numberOfCharInSub = 0
+                if (char == substring[numberOfCharInSub]) {
+                    for (numberOfInput in numberOfChar until numberOfChar + length) {
+                        if (input[numberOfInput] == substring[numberOfCharInSub]) {
+                            numberOfCharInSub++
+                            if (numberOfCharInSub == length) numberOfSubstrings++
+                        } else {
+                            break
+                        }
                     }
                 }
+                numberOfChar++
             }
-            numberOfChar++
+            if (item in map.keys) {
+                val number = map[item]!! + numberOfSubstrings
+                map[item] = number
+            } else {
+                map[item] = numberOfSubstrings
+            }
         }
-        map[item] = numberOfSubstrings
     }
     return map.toMap()
 }
