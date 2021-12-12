@@ -126,15 +126,16 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    if (points.size < 2) throw IllegalArgumentException()
+    val set = points.toSet()
+    if (set.size < 2) throw IllegalArgumentException()
     var maxLength = 0.0
-    for (pointA in points) {
-        for (pointB in points) {
+    for (pointA in set) {
+        for (pointB in set) {
             if (maxLength < pointA.distance(pointB)) maxLength = pointA.distance(pointB)
         }
     }
-    for (pointA in points) {
-        for (pointB in points) {
+    for (pointA in set) {
+        for (pointB in set) {
             if (maxLength == pointA.distance(pointB)) {
                 return Segment(pointA, pointB)
             }
@@ -280,23 +281,24 @@ fun circleByThreePointsDelta(a: Point, b: Point, c: Point, delta: Double): Circl
 }
 
 fun minContainingCircle(vararg points: Point): Circle {
-    if (points.isEmpty()) throw IllegalArgumentException()
-    if (points.size == 1) return Circle(points[0], 0.0)
+    val set = points.toSet().toList()
+    if (set.isEmpty()) throw IllegalArgumentException()
+    if (set.size == 1) return Circle(set[0], 0.0)
     val maxDiameter = diameter(*points)
     var radius = maxDiameter.length() / 2
     var center = maxDiameter.center()
     var contains = true
     val maxDiameterCircle = Circle(center, radius)
-    for (point in points) {
+    for (point in set) {
         if (!maxDiameterCircle.contains(point)) contains = false
     }
     if (!contains) radius *= 10
-    for (point1 in 0..points.size - 3) {
-        for (point2 in point1 + 1..points.size - 2) {
-            for (point3 in point2 + 1 until points.size) {
-                val circle = circleByThreePointsDelta(points[point1], points[point2], points[point3], 0.1e-14)
+    for (point1 in 0..set.size - 3) {
+        for (point2 in point1 + 1..set.size - 2) {
+            for (point3 in point2 + 1 until set.size) {
+                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1e-5)
                 contains = true
-                for (point in points) {
+                for (point in set) {
                     if (!circle.contains(point)) contains = false
                 }
                 if (contains && circle.radius < radius) {
