@@ -170,7 +170,7 @@ fun centerFile(inputName: String, outputName: String) {
                 writer.write(string)
                 writer.newLine()
             } else {
-                var newString = StringBuilder(string.trim())
+                val newString = StringBuilder(string.trim())
                 val number = (maxLength + length) / 2
                 while (newString.length < number) {
                     newString.insert(0, ' ')
