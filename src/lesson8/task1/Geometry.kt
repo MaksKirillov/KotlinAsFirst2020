@@ -126,7 +126,7 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    val set = points.toSet()
+    val set = points.toSet().toList()
     if (set.size < 2) throw IllegalArgumentException()
     var maxLength = 0.0
     for (pointA in set) {
