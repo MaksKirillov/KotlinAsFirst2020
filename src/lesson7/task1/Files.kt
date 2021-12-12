@@ -3,7 +3,6 @@
 package lesson7.task1
 
 import java.io.File
-import kotlin.time.milliseconds
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -160,7 +159,27 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var maxLength = 0
+    File(inputName).forEachLine { string ->
+        if (maxLength < string.trim().length) maxLength = string.trim().length
+    }
+    File(outputName).bufferedWriter().use { writer ->
+        File(inputName).forEachLine { string ->
+            val length = string.trim().length
+            if (maxLength == length) {
+                writer.write(string)
+                writer.newLine()
+            } else {
+                var newString = StringBuilder(string.trim())
+                val number = (maxLength + length) / 2
+                while (newString.length < number) {
+                    newString.insert(0, ' ')
+                }
+                writer.write(newString.toString())
+                writer.newLine()
+            }
+        }
+    }
 }
 
 /**
