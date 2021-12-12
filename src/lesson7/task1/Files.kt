@@ -95,7 +95,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (item in substrings) {
             val substring = item.lowercase()
             val length = item.length
-            val input = it.lowercase()
+            val input = it.lowercase() + " "
             var numberOfSubstrings = 0
             var numberOfChar = 0
             for (char in input) {
