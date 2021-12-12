@@ -296,7 +296,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     for (point1 in 0..set.size - 3) {
         for (point2 in point1 + 1..set.size - 2) {
             for (point3 in point2 + 1 until set.size) {
-                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1e-12)
+                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1e-11)
                 contains = true
                 for (point in set) {
                     if (!circle.contains(point)) contains = false
