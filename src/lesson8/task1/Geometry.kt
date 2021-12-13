@@ -301,7 +301,6 @@ fun minContainingCircle(vararg points: Point): Circle {
                 for (point in set) {
                     if (!circle.contains(point)) contains = false
                 }
-                println("$point1, $point2, $point3: $contains, $circle ")
                 if (contains && circle.radius < radius) {
                     radius = circle.radius
                     center = circle.center
