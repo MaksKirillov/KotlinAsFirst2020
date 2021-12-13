@@ -269,12 +269,13 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * три точки данного множества, либо иметь своим диаметром отрезок,
  * соединяющий две самые удалённые точки в данном множестве.
  */
-fun circleByThreePointsDelta(a: Point, b: Point, c: Point, delta: Double): Circle {
-    val bisector1 = bisectorByPoints(a, b)
-    val bisector2 = bisectorByPoints(b, c)
-    val center = bisector1.crossPoint(bisector2)
-    val radius = center.distance(a)
-    return Circle(center, radius + delta)
+fun maxRadius(points: List<Point>, center: Point): Double {
+    var radius = 0.0
+    for (point in points) {
+        val length = center.distance(point)
+        if (radius < length) radius = length
+    }
+    return radius
 }
 
 fun minContainingCircle(vararg points: Point): Circle {
@@ -285,24 +286,15 @@ fun minContainingCircle(vararg points: Point): Circle {
         Point((set[0].x + set[1].x) / 2, (set[0].y + set[1].y) / 2), set[0].distance(set[1]) / 2
     )
     val maxDiameter = diameter(*points)
-    var radius = maxDiameter.length() / 2
     var center = maxDiameter.center()
-    var contains = true
-    val maxDiameterCircle = Circle(center, radius)
-    for (point in set) {
-        if (!maxDiameterCircle.contains(point)) contains = false
-    }
-    if (!contains) radius = Double.MAX_VALUE
+    var radius = maxRadius(set, center)
     for (point1 in 0..set.size - 3) {
         for (point2 in point1 + 1..set.size - 2) {
             for (point3 in point2 + 1 until set.size) {
-                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1E-14)
-                contains = true
-                for (point in set) {
-                    if (!circle.contains(point)) contains = false
-                }
-                if (contains && circle.radius < radius) {
-                    radius = circle.radius
+                val circle = circleByThreePoints(set[point1], set[point2], set[point3])
+                val tempRadius = maxRadius(set, circle.center)
+                if (tempRadius < radius) {
+                    radius = tempRadius
                     center = circle.center
                 }
             }
