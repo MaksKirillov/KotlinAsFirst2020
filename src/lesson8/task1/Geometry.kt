@@ -292,7 +292,7 @@ fun minContainingCircle(vararg points: Point): Circle {
             for (point3 in point2 + 1 until set.size) {
                 val circle = circleByThreePoints(set[point1], set[point2], set[point3])
                 val tempRadius = maxRadius(set, circle.center)
-                if (tempRadius < radius) {
+                if (tempRadius < radius && tempRadius != 0.0) {
                     radius = tempRadius
                     center = circle.center
                 }
