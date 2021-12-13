@@ -113,7 +113,7 @@ data class Segment(val begin: Point, val end: Point) {
 
     fun center() = Point((begin.x + end.x) / 2, (begin.y + end.y) / 2)
 
-    fun angle() = ((atan((begin.y - end.y) / (begin.x - end.x))) + PI) % PI
+    fun angle() = (atan2(begin.y - end.y, begin.x - end.x) + PI) % PI
 }
 
 /**

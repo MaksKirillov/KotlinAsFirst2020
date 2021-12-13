@@ -346,9 +346,12 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
         map[list[i]] = i
     }
     for (i in list.indices) {
-        if (number - list[i] in map.keys && i != map[number - list[i]]!!) {
-            pair = Pair(i, map[number - list[i]]!!)
-            break
+        if (number - list[i] in map.keys) {
+            val badNumber = map[number - list[i]]
+            if (i != badNumber) {
+                pair = Pair(i, badNumber!!)
+                break
+            }
         }
     }
     return pair
