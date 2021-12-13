@@ -96,10 +96,7 @@ data class Circle(val center: Point, val radius: Double) {
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean {
-        val length = center.distance(p)
-        return length <= radius
-    }
+    fun contains(p: Point): Boolean = center.distance(p) <= radius
 }
 
 /**
@@ -116,7 +113,7 @@ data class Segment(val begin: Point, val end: Point) {
 
     fun center() = Point((begin.x + end.x) / 2, (begin.y + end.y) / 2)
 
-    fun angle() = ((atan((begin.y - end.y) / (begin.x - end.x))) + 2 * PI) % PI
+    fun angle() = ((atan((begin.y - end.y) / (begin.x - end.x))) + PI) % PI
 }
 
 /**
@@ -284,23 +281,25 @@ fun minContainingCircle(vararg points: Point): Circle {
     val set = points.toSet().toList()
     if (set.isEmpty()) throw IllegalArgumentException()
     if (set.size == 1) return Circle(set[0], 0.0)
-    val maxDiameter = diameter(*points)
-    var radius = maxDiameter.length() / 2
-    var center = maxDiameter.center()
+    if (set.size == 2) return Circle(
+        Point((set[0].x + set[1].x) / 2, (set[0].y + set[1].y) / 2), set[0].distance(set[1]) / 2
+    )
+    var radius = diameter(*points).length() / 2
+    var center = diameter(*points).center()
     var contains = true
-    val maxDiameterCircle = Circle(center, radius)
     for (point in set) {
-        if (!maxDiameterCircle.contains(point)) contains = false
+        if (!Circle(center, radius).contains(point)) contains = false
     }
     if (!contains) radius = Double.MAX_VALUE
     for (point1 in 0..set.size - 3) {
         for (point2 in point1 + 1..set.size - 2) {
             for (point3 in point2 + 1 until set.size) {
-                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1E-12)
+                val circle = circleByThreePointsDelta(set[point1], set[point2], set[point3], 0.1E-14)
                 contains = true
                 for (point in set) {
                     if (!circle.contains(point)) contains = false
                 }
+                println("$point1, $point2, $point3: $contains, $circle ")
                 if (contains && circle.radius < radius) {
                     radius = circle.radius
                     center = circle.center
