@@ -285,8 +285,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     if (set.size == 2) return Circle(
         Point((set[0].x + set[1].x) / 2, (set[0].y + set[1].y) / 2), set[0].distance(set[1]) / 2
     )
-    val maxDiameter = diameter(*points)
-    var center = maxDiameter.center()
+    var center = diameter(*points).center()
     var radius = maxRadius(set, center)
     for (point1 in 0..set.size - 3) {
         for (point2 in point1 + 1..set.size - 2) {
