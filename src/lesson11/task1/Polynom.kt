@@ -156,21 +156,24 @@ class Polynom(vararg coeffs: Double) {
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean =
-        other is Polynom && polynom.contentEquals(other.polynom)
+    override fun equals(other: Any?): Boolean = when {
+        this === other -> true
+        other is Polynom && polynom.contentEquals(other.polynom) -> true
+        else -> false
+    }
+
 
     /**
      * Получение хеш-кода
      */
+
     override fun hashCode(): Int {
         var hash = 0
         for (coefficient in polynom) {
             hash += coefficient.toInt()
             hash += (hash shl 10)
-            hash = (hash.toDouble().pow(hash shr 6)).toInt()
         }
         hash += hash shl 3
-        hash = (hash.toDouble().pow(hash shr 11)).toInt()
         hash += hash shl 15
         return hash
     }

@@ -80,4 +80,17 @@ internal class TableFunctionTest {
         f2.add(1.0, 2.0)
         assertEquals(f1, f2)
     }
+
+    @Test
+    @Tag("6")
+    fun hashCodeTest() {
+        val f1 = TableFunction()
+        f1.add(1.0, 2.0)
+        f1.add(3.0, 4.0)
+        val f2 = TableFunction()
+        f2.add(3.0, 4.0)
+        f2.add(1.0, 2.0)
+        assertEquals(f1.hashCode(), f2.hashCode())
+    }
+
 }
