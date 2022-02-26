@@ -173,7 +173,6 @@ class Polynom(vararg coeffs: Double) {
             hash += coefficient.toInt()
             hash += (hash shl 10)
         }
-        hash += hash shl 3
         hash += hash shl 15
         return hash
     }

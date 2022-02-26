@@ -170,7 +170,6 @@ class TableFunction {
             hash += key.toInt() * 10 + value.toInt()
             hash += (hash shl 10)
         }
-        hash += hash shl 3
         hash += hash shl 15
         return hash
     }
